@@ -100,8 +100,11 @@ module DeathByCaptcha
     # @return [Hash] Response from the DeathByCaptcha API.
     #
     def perform(action, method = :get, payload = {})
-      payload.merge!(username: self.username, password: self.password)
-
+      if self.username == "authtoken"
+        payload.merge!(username: self.username, password: self.password)
+      else
+        payload.merge!(authtoken: self.password)
+      end
       headers = { 'User-Agent' => DeathByCaptcha::API_VERSION }
 
       if method == :post
