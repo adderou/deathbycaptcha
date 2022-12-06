@@ -72,11 +72,14 @@ module DeathByCaptcha
     # @return [Hash] Response from the DeathByCaptcha API.
     #
     def perform(action, payload = {})
+      if self.username == "authtoken"
+        payload.merge!(authtoken: self.password)
+      else
+        payload.merge!(username: self.username, password: self.password)
+      end
       payload.merge!(
         cmd:       action,
         version:   DeathByCaptcha::API_VERSION,
-        username:  self.username,
-        password:  self.password,
         vendor_id: 5,
       )
 
